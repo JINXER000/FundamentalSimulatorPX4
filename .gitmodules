@@ -1,47 +1,57 @@
 [submodule "mavlink/include/mavlink/v2.0"]
 	path = mavlink/include/mavlink/v2.0
-	url = https://github.com/mavlink/c_library_v2.git
+	url = https://gitee.com/robin_shaun/c_library_v2.git
 	branch = master
 [submodule "src/drivers/uavcan/libuavcan"]
 	path = src/drivers/uavcan/libuavcan
-	url = https://github.com/PX4/uavcan.git
+	url = https://gitee.com/robin_shaun/uavcan.git
 	branch = px4
 [submodule "Tools/jMAVSim"]
 	path = Tools/jMAVSim
-	url = https://github.com/PX4/jMAVSim.git
+	url = https://gitee.com/robin_shaun/jMAVSim.git
 	branch = master
 [submodule "Tools/sitl_gazebo"]
 	path = Tools/sitl_gazebo
-	url = https://github.com/PX4/sitl_gazebo.git
+	url = https://gitee.com/robin_shaun/sitl_gazebo.git
 	branch = master
 [submodule "src/lib/matrix"]
 	path = src/lib/matrix
-	url = https://github.com/PX4/Matrix.git
+	url = https://gitee.com/robin_shaun/Matrix.git
 	branch = master
 [submodule "src/lib/ecl"]
 	path = src/lib/ecl
-	url = https://github.com/PX4/ecl.git
+	url = https://gitee.com/robin_shaun/ecl.git
 	branch = master
 [submodule "boards/atlflight/cmake_hexagon"]
 	path = boards/atlflight/cmake_hexagon
-	url = https://github.com/PX4/cmake_hexagon.git
+	url = https://gitee.com/robin_shaun/cmake_hexagon.git
 	branch = px4
 [submodule "src/drivers/gps/devices"]
 	path = src/drivers/gps/devices
-	url = https://github.com/PX4/GpsDrivers.git
+	url = https://gitee.com/robin_shaun/GpsDrivers.git
 	branch = master
 [submodule "src/modules/micrortps_bridge/micro-CDR"]
 	path = src/modules/micrortps_bridge/micro-CDR
-	url = https://github.com/PX4/micro-CDR.git
+	url = https://gitee.com/robin_shaun/micro-CDR.git
 	branch = px4
 [submodule "platforms/nuttx/NuttX/nuttx"]
 	path = platforms/nuttx/NuttX/nuttx
-	url = https://github.com/PX4/NuttX.git
-	branch = px4_firmware_nuttx-8.2
+	url = https://gitee.com/robin_shaun/NuttX.git
+	branch = px4_firmware_nuttx-9.1.0+
 [submodule "platforms/nuttx/NuttX/apps"]
 	path = platforms/nuttx/NuttX/apps
-	url = https://github.com/PX4/NuttX-apps.git
-	branch = px4_firmware_nuttx-8.2
+	url = https://gitee.com/robin_shaun/NuttX-apps.git
+	branch = px4_firmware_nuttx-9.1.0+
 [submodule "platforms/qurt/dspal"]
 	path = platforms/qurt/dspal
-	url = https://github.com/ATLFlight/dspal.git
+	url = https://gitee.com/robin_shaun/dspal.git
+[submodule "Tools/flightgear_bridge"]
+	path = Tools/flightgear_bridge
+	url = https://gitee.com/robin_shaun/PX4-FlightGear-Bridge.git
+	branch = master 
+[submodule "Tools/jsbsim_bridge"]
+	path = Tools/jsbsim_bridge
+	url = https://gitee.com/robin_shaun/px4-jsbsim-bridge.git
+[submodule "src/examples/gyro_fft/CMSIS_5"]
+	path = src/examples/gyro_fft/CMSIS_5
+	url = https://gitee.com/mirrors/CMSIS_5
