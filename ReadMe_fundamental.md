@@ -4,5 +4,9 @@ export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
 roslaunch px4 indoor1.launch 
 
+python multirotor_communication.py
 
 roslaunch cpc_aux_mapping laser3d_sim.launch
+roslaunch cpc_aux_mapping sim_uav.launch
+
+launch-prefix="xterm -e cuda-gdb --args"

@@ -13,7 +13,7 @@
     <arg name="est" default="ekf2"/>
     <arg name="vehicle" default="iris"/>
     <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/outdoor3.world"/>
-    <arg name="my_model" default="iris_vlp16"/>
+    <arg name="my_model" default="iris_2d_lidar"/>
     <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/$(arg my_model)/$(arg my_model).sdf"/>
 
     <!-- gazebo configs -->
