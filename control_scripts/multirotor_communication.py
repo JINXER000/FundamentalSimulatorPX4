@@ -3,7 +3,7 @@ import tf
 import yaml
 from mavros_msgs.msg import GlobalPositionTarget, State, PositionTarget
 from mavros_msgs.srv import CommandBool, CommandVtolTransition, SetMode
-from geometry_msgs.msg import PoseStamped, Pose, Twist
+from geometry_msgs.msg import PoseStamped, Pose, Twist, Vector3
 from gazebo_msgs.srv import GetModelState
 from nav_msgs.msg import Odometry
 from sensor_msgs.msg import Imu, NavSatFix
@@ -37,7 +37,9 @@ class Communication:
         self.mission = None
         self.transition_state = None
         self.transition = None
-        
+        self.initial_pose= None
+        self.model_pose =None
+
         self.platform = platform.platform()
         rospy.init_node(self.vehicle_type+'_'+self.vehicle_id+"_communication")
      
@@ -62,6 +64,8 @@ class Communication:
         '''
         self.target_motion_pub = rospy.Publisher(self.vehicle_type+'_'+self.vehicle_id+"/mavros/setpoint_raw/local", PositionTarget, queue_size=10)
         self.odom_groundtruth_pub = rospy.Publisher(self.vehicle_type+'_'+self.vehicle_id+'/ground_truth/odom', Odometry, queue_size=10)
+        # self.vio_pub= rospy.Publisher(self.vehicle_type+'_'+self.vehicle_id+'/mavros/vision_pose/pose', PoseStamped, queue_size=10)
+        self.vio_pub= rospy.Publisher(self.vehicle_type+'_'+self.vehicle_id+'/mavros/odometry/out', Odometry, queue_size=10)
         # self.odom_GTego_pub = rospy.Publisher('/ground_truth/state', Odometry, queue_size=10)
         self.sub_model = rospy.Subscriber('/gazebo/model_states',ModelStates,self.model_callback)
         '''
@@ -84,6 +88,15 @@ class Communication:
                 time.sleep(0.5)
         self.coordinate_frame = 1
         self.target_motion=self.construct_target(z=2,yaw=self.current_heading)
+
+        # set cmd offset
+        if self.model_pose != None:
+            self.initial_pose=Vector3(self.model_pose.x-self.local_pose.pose.position.x,
+                                        self.model_pose.y-self.local_pose.pose.position.y,
+                                        self.model_pose.z-self.local_pose.pose.position.z)
+            print('init pose is {x}  {y}  {z}'.format(x=self.initial_pose.x,y=self.initial_pose.y,z=self.initial_pose.z))
+        else:
+            raise Exception('No model state!! ')
 
         for i in range(5):
             self.arm_state =self.arm()
@@ -121,6 +134,16 @@ class Communication:
                 trueodom.twist.twist.angular.z=wz
 
                 self.odom_groundtruth_pub.publish(trueodom)
+                self.model_pose = trueodom.pose.pose.position
+                # pub slam odom to ekf
+                # slam_pose=PoseStamped()
+                # slam_pose.header.stamp=rospy.Time.now()
+                # slam_pose.header.frame_id ="world"
+                # slam_pose.pose=msg.pose[i]
+                # self.vio_pub.publish(slam_pose)
+                trueodom.header.frame_id ="odom"
+                trueodom.child_frame_id="base_link"
+                self.vio_pub.publish(trueodom)
                 break
 
     def start(self):
@@ -213,7 +236,13 @@ class Communication:
 
     def offboard_cmd_pose_callback(self, msg):
         self.coordinate_frame = 1
-        self.target_motion = self.construct_target(x=msg.pose.position.x,y=msg.pose.position.y,z=msg.pose.position.z)
+        # cmd_local =Vector3(msg.pose.position.x,msg.pose.position.y,msg.pose.position.z) 
+        cmd_local =Vector3(msg.pose.position.x-self.initial_pose.x,
+                            msg.pose.position.y-self.initial_pose.y,
+                            msg.pose.position.z-self.initial_pose.z) 
+        # self.target_motion = self.construct_target(x=msg.pose.position.x,y=msg.pose.position.y,z=msg.pose.position.z)
+        self.target_motion = self.construct_target(x=cmd_local.x,y=cmd_local.y,z=cmd_local.z)
+
  
     def cmd_pose_enu_callback(self, msg):
         self.coordinate_frame = 1
