@@ -1,5 +1,17 @@
-dependency:
-make sure cpc_aux_mapping, cpc_motion_planning, cpc_ws in imav branch
+# install
+First we recommand you follow https://www.yuque.com/xtdrone/manual_cn/basic_config_1.11 strictly!
+ to install dependencies. Run one demo before trying below. 
+Then you replace the official repo with this one.
+```
+git clone  https://gitee.com/jinxer000/fundamental_sys_xtdrone.git
+git submodule update --init --recursive
+```
+One additional step: 
+```
+  cp -r sitl_config/models/*  ~/.gazebo/models/
+  ```
+Also make sure cpc_aux_mapping, cpc_motion_planning, cpc_reference_publisher,cpc_ws in imav branch.
+Then compile two repos respectively.
 
 # indoor demo
 ```

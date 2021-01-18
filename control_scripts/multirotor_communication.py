@@ -236,12 +236,13 @@ class Communication:
 
     def offboard_cmd_pose_callback(self, msg):
         self.coordinate_frame = 1
+        yaw_tgt= self.q2yaw(msg.pose.orientation)
         # cmd_local =Vector3(msg.pose.position.x,msg.pose.position.y,msg.pose.position.z) 
         cmd_local =Vector3(msg.pose.position.x-self.initial_pose.x,
                             msg.pose.position.y-self.initial_pose.y,
                             msg.pose.position.z-self.initial_pose.z) 
         # self.target_motion = self.construct_target(x=msg.pose.position.x,y=msg.pose.position.y,z=msg.pose.position.z)
-        self.target_motion = self.construct_target(x=cmd_local.x,y=cmd_local.y,z=cmd_local.z)
+        self.target_motion = self.construct_target(x=cmd_local.x,y=cmd_local.y,z=cmd_local.z, yaw=yaw_tgt)
 
  
     def cmd_pose_enu_callback(self, msg):
