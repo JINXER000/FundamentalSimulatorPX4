@@ -1,3 +1,5 @@
+# NOte
+iris, iris_asus are in hitl mode.
 # install
 First we recommand you follow https://www.yuque.com/xtdrone/manual_cn/basic_config_1.11 strictly!
  to install dependencies. Run one demo before trying below. 
@@ -13,6 +15,8 @@ One additional step:
 Also make sure cpc_aux_mapping, cpc_motion_planning, cpc_reference_publisher,cpc_ws in imav branch.
 Then compile two repos respectively.
 
+roslaunch mavros px4.launch fcu_url:=/dev/ttyUSB0:921600
+or roslaunch mavros mavros_hitl.launch
 # indoor demo
 ```
 cd PX4_Firmware

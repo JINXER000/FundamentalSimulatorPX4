@@ -37,7 +37,7 @@ class Communication:
         self.mission = None
         self.transition_state = None
         self.transition = None
-        self.initial_pose= None
+        self.initial_pose= Vector3(0,0,0)
         self.model_pose =None
 
         self.platform = platform.platform()
@@ -88,8 +88,7 @@ class Communication:
                 time.sleep(0.5)
         self.coordinate_frame = 1
         self.target_motion=self.construct_target(z=2,yaw=self.current_heading)
-
-        # set cmd offset
+       # set cmd offset
         if self.model_pose != None:
             self.initial_pose=Vector3(self.model_pose.x-self.local_pose.pose.position.x,
                                         self.model_pose.y-self.local_pose.pose.position.y,
@@ -154,7 +153,7 @@ class Communication:
         '''
         while not rospy.is_shutdown():
             self.target_motion_pub.publish(self.target_motion)
-            
+            # print('target z is ',1)
             if (self.flight_mode is "LAND") and (self.local_pose.pose.position.z < 0.15):
                 if(self.disarm()):
                     self.flight_mode = "DISARMED"
