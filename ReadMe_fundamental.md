@@ -15,6 +15,7 @@ One additional step:
 Also make sure cpc_aux_mapping, cpc_motion_planning, cpc_reference_publisher,cpc_ws in imav branch.
 Then compile two repos respectively.
 
+You can also copy the catkin_ws into your home folder. 
 # Use simulator without offboard
 ```
 cd PX4_Firmware
@@ -30,6 +31,7 @@ python multirotor_keyboard_control.py iris 1 vel
 
 ```
 Then you might control the UAV manually.
+If you want to use 3d lidar, please replace line 15 with line 14 in indoor1.launch.
 # indoor demo with offboard
 ```
 cd PX4_Firmware
@@ -74,6 +76,8 @@ roslaunch cpc_motion_planning motion_hitl_multi.launch
 
 First, follow https://docs.px4.io/master/en/simulation/hitl.html and do a demo with RC.
 After modifying sdf, turn off RC.
+
+
 ```
 cd PX4_Firmware
 source ~/catkin_ws/devel/setup.bash    # (optional)
@@ -87,8 +91,11 @@ python multirotor_communication.py iris 0
 rosservice call /iris_0/engage
 ```
 You will see the UAV takes off. 
-download mavros under catkin_ws. Then
+Then
 ```
+cd PX4_Firmware
+cp launch/mavros_hitl.launch ~/catkin_ws/src/mavros/launch/
+cd ~/catkin_ws/
 roslaunch mavros mavros_hitl.launch
 
 cd cpc_ws
