@@ -10,7 +10,7 @@ git submodule update --init --recursive
 ```
 One additional step: 
 ```
-  cp -r sitl_config/models/*  ~/.gazebo/models/
+  cp -r Tools/sitl_gazebo/models/*  ~/.gazebo/models/
   ```
 Also make sure cpc_aux_mapping, cpc_motion_planning, cpc_reference_publisher,cpc_ws in imav branch.
 Then compile two repos respectively.
