@@ -14,6 +14,11 @@ One additional step:
   ```
 Also make sure cpc_aux_mapping, cpc_motion_planning, cpc_reference_publisher,cpc_ws in imav branch.
 Then compile two repos respectively.
+For PX4_firmware, you can do
+```
+make px4_sitl_default gazebo
+```
+
 
 You can also copy the catkin_ws into your home folder. 
 # Use simulator without offboard
@@ -43,6 +48,7 @@ roslaunch px4 indoor1.launch
 
 cd control_scripts
 python multirotor_communication.py iris 0
+rosservice call /iris_0/engage
 
 cd cpc_ws
 roslaunch cpc_aux_mapping hitl_sim.launch
