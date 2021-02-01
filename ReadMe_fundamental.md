@@ -1,6 +1,9 @@
 # NOte
 iris, iris_asus are in sitl mode. If you want to do hitl, please modify sdf.
 # install
+## basic requirements: 
+ubuntu 18.04, gazebo 9.15+
+## steps
 First we recommand you follow https://www.yuque.com/xtdrone/manual_cn/basic_config_1.11 strictly!
  to install dependencies. Run one demo before trying below. 
 Then you replace the official repo with this one.
@@ -16,6 +19,7 @@ Also make sure cpc_aux_mapping, cpc_motion_planning, cpc_reference_publisher,cpc
 Then compile two repos respectively.
 For PX4_firmware, you can do
 ```
+git tag -a v1.11.0 -m "init"
 make px4_sitl_default gazebo
 ```
 
