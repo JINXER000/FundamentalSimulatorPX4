@@ -2,7 +2,7 @@
 iris, iris_asus are in sitl mode. If you want to do hitl, please modify sdf.
 # install
 ## basic requirements: 
-ubuntu 18.04, gazebo 9.15+
+ubuntu 18.04, gazebo 9.10+
 ## steps
 First we recommand you follow https://www.yuque.com/xtdrone/manual_cn/basic_config_1.11 strictly!
  to install dependencies. Run one demo before trying below. 
@@ -15,6 +15,10 @@ One additional step:
 ```
   cp -r Tools/sitl_gazebo/models/*  ~/.gazebo/models/
   ```
+- add human model:
+```
+cp -r Tools/sitl_gazebo/models/ihuman/* ~/.gazebo/models/
+```
 Also make sure cpc_aux_mapping, cpc_motion_planning, cpc_reference_publisher,cpc_ws in imav branch.
 Then compile two repos respectively.
 For PX4_firmware, you can do
@@ -26,9 +30,11 @@ make px4_sitl_default gazebo
 
 You can also copy the catkin_ws into your home folder. 
 # Use simulator without offboard
+
 ```
 cd PX4_Firmware
-source ~/catkin_ws/devel/setup.bash    # (optional)
+cp -r catkin_ws/* ~/
+source ~/catkin_ws/devel/setup.bash   
 source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
