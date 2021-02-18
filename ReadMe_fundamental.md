@@ -38,7 +38,7 @@ source ~/catkin_ws/devel/setup.bash
 source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
-roslaunch px4 indoor1.launch 
+roslaunch px4 imav_indoor_rich.launch 
 
 cd control_scripts
 python multirotor_communication_manual.py iris 0
@@ -46,7 +46,7 @@ python multirotor_keyboard_control.py iris 1 vel
 
 ```
 Then you might control the UAV manually.
-If you want to use 3d lidar, please replace line 15 with line 14 in indoor1.launch.
+If you want to use 3d lidar, please replace line 15 with line 14 in launch file
 # indoor demo with offboard
 ```
 cd PX4_Firmware
@@ -54,7 +54,7 @@ source ~/catkin_ws/devel/setup.bash    # (optional)
 source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
-roslaunch px4 indoor1.launch 
+roslaunch px4 imav_indoor_rich.launch 
 
 cd control_scripts
 python multirotor_communication.py iris 0
