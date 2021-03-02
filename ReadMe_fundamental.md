@@ -1,5 +1,6 @@
 # NOte
-iris, iris_asus are in sitl mode. If you want to do hitl, please modify sdf.
+- iris, iris_asus are in sitl mode. If you want to do hitl, please modify sdf.
+- after using git pull, do 'git submodule  init & git submodule update'
 # install
 ## basic requirements: 
 ubuntu 18.04, gazebo 9.10+
@@ -165,6 +166,10 @@ roslaunch cpc_aux_mapping sim_uav.launch
 
 launch-prefix="xterm -e cuda-gdb --args"
 
-
+## about texture (For Zhaiyu)
+Scripts can be found in:
 /usr/share/gazebo-9/media/materials/scripts$
+
+But in this repo,  you can check Tools/sitl_gazebo/models/rover/material/   instead.
+
 

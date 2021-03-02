@@ -14,7 +14,7 @@ import math
 from multiprocessing import Process
 import sys
 import platform
-
+from gazebo_msgs.msg import ModelStates
 
 class Communication:
 
@@ -38,6 +38,7 @@ class Communication:
         self.transition = None
         
         self.platform = platform.platform()
+        rospy.init_node(self.vehicle_type+'_'+self.vehicle_id+"_communication")
             
         '''
         ros subscribers
@@ -56,9 +57,10 @@ class Communication:
         ''' 
         ros publishers
         '''
+        self.vio_pub= rospy.Publisher(self.vehicle_type+'_'+self.vehicle_id+'/mavros/odometry/out', Odometry, queue_size=10)
         self.target_motion_pub = rospy.Publisher(self.vehicle_type+'_'+self.vehicle_id+"/mavros/setpoint_raw/local", PositionTarget, queue_size=10)
         self.odom_groundtruth_pub = rospy.Publisher('/xtdrone/'+self.vehicle_type+'_'+self.vehicle_id+'/ground_truth/odom', Odometry, queue_size=10)
-
+        self.sub_model = rospy.Subscriber('/gazebo/model_states',ModelStates,self.model_callback)
         '''
         ros services
         '''
@@ -69,7 +71,7 @@ class Communication:
         print(self.vehicle_type+'_'+self.vehicle_id+": "+"communication initialized")
 
     def start(self):
-        rospy.init_node(self.vehicle_type+'_'+self.vehicle_id+"_communication")
+        # rospy.init_node(self.vehicle_type+'_'+self.vehicle_id+"_communication")
         rate = rospy.Rate(100)
         '''
         main ROS thread
@@ -92,6 +94,38 @@ class Communication:
             self.odom_groundtruth_pub.publish(odom)
 
             rate.sleep()
+
+    def model_callback(self,msg):
+        # https://blog.csdn.net/weixin_43180028/article/details/104587506
+        # https://github.com/LizhiyuanBest/PROBOT_Anno/blob/master/probot_grasping/scripts/grasping_demo.py
+
+        for i,x in enumerate(msg.name):
+            if x == self.vehicle_type+'_'+self.vehicle_id:
+
+                trueodom=Odometry()
+                trueodom.header.stamp = rospy.Time.now()
+                trueodom.header.frame_id ="world"
+                pose=msg.pose[i]
+                quat=pose.orientation
+                pos=pose.position
+                # print(quat)
+                trueodom.pose.pose.orientation=quat
+                trueodom.pose.pose.position=pos
+
+                vel=msg.twist[i]
+                vx=vel.linear.x
+                vy=vel.linear.y
+                wz=vel.angular.z
+                v = math.sqrt(math.pow(vx,2)+math.pow(vy,2))
+                trueodom.twist.twist.linear.x=v
+                trueodom.twist.twist.angular.z=wz
+
+                self.odom_groundtruth_pub.publish(trueodom)
+                self.model_pose = trueodom.pose.pose.position
+                trueodom.header.frame_id ="odom"
+                trueodom.child_frame_id="base_link"
+                self.vio_pub.publish(trueodom)
+                break
 
     def local_pose_callback(self, msg):
         self.local_pose = msg
