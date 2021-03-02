@@ -121,9 +121,50 @@ roslaunch cpc_motion_planning motion_nf1_sitl.launch
 roslaunch mobile_cylinder multi_box.launch
 ```
 Then you can set target in rviz!
+
+## cooperative 
+you need to install gazebo_ros_link_attacher plugin following this github instructions:
+https://github.com/pal-robotics/gazebo_ros_link_attacher
+```
+cd PX4_Firmware
+source ~/catkin_ws/devel/setup.bash    # (optional)
+source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
+
+export GAZEBO_PLUGIN_PATH=${GAZEBO_PLUGIN_PATH}:~/gazebo_ros_link_attacher/devel/lib
+roslaunch px4 amu_cooperative_assembly.launch
+```
+In another terminal: copy the "cooperative_attach.py" into ~/gazebo_ros_link_attacker/scripts
+source ~/gazebo_ros_link_attacher/devel/setup.bash
+
+python ~/gazebo_ros_link_attacher/src/gazebo_ros_link_attacher/scripts/cooperative_attach.py
+
+you will see:
+[INFO] : Attaching iris_0 and payload
+[INFO] : Attaching iris_1 and payload
+[INFO] : Attaching iris_2 and payload
+It indicates UAVs and payload are linked together
+
+Then:
+cd ~/XTDrone/communication
+python multirotor_communication_manual.py iris 0
+python multirotor_communication_manual.py iris 1
+python multirotor_communication_manual.py iris 2
+
+cd ~/XTDrone/control
+python multirotor_keyboard_control.py iris 3 vel
+
+After taking off, you need to delete the shelfs:
+rosservice call /gazebo/delete_model "model_name: 'shelfs'"
+
 ## developing
+
 roslaunch cpc_aux_mapping laser3d_sim.launch
 roslaunch cpc_aux_mapping sim_uav.launch
 
 launch-prefix="xterm -e cuda-gdb --args"
+
+
+/usr/share/gazebo-9/media/materials/scripts$
 

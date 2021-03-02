@@ -1,0 +1,45 @@
+<?xml version="1.0" ?>
+<sdf version="1.5">
+  <model name="shelf">
+    <static>true</static>
+    <link name="link">
+      <static>1</static>
+      <pose>-0.1 0 0.2 0 0 0</pose>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.01 0.2 0.02</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.01 0.2 0.02</size>
+          </box>
+        </geometry>
+      </visual>
+    </link>
+
+    
+
+    <link name="link1">
+      <static>1</static>
+      <pose>0.1 0 0.2 0 0 0</pose>
+      <collision name="collision">
+        <geometry>
+          <box>
+            <size>0.01 0.2 0.02</size>
+          </box>
+        </geometry>
+      </collision>
+      <visual name="visual">
+        <geometry>
+          <box>
+            <size>0.01 0.2 0.02</size>
+          </box>
+        </geometry>
+      </visual>
+    </link>
+  </model>
+</sdf>
