@@ -15,6 +15,7 @@ from multiprocessing import Process
 import sys
 import platform
 from gazebo_msgs.msg import ModelStates
+from sensor_msgs.msg import Image
 
 class Communication:
 
@@ -36,6 +37,7 @@ class Communication:
         self.mission = None
         self.transition_state = None
         self.transition = None
+        self.img_stamp = None
         
         self.platform = platform.platform()
         rospy.init_node(self.vehicle_type+'_'+self.vehicle_id+"_communication")
@@ -61,6 +63,7 @@ class Communication:
         self.target_motion_pub = rospy.Publisher(self.vehicle_type+'_'+self.vehicle_id+"/mavros/setpoint_raw/local", PositionTarget, queue_size=10)
         self.odom_groundtruth_pub = rospy.Publisher('/xtdrone/'+self.vehicle_type+'_'+self.vehicle_id+'/ground_truth/odom', Odometry, queue_size=10)
         self.sub_model = rospy.Subscriber('/gazebo/model_states',ModelStates,self.model_callback)
+        self.sub_img = rospy.Subscriber(self.vehicle_type+'_'+self.vehicle_id+'/stereo_camera/left/image_raw',Image, self.img_callback)
         '''
         ros services
         '''
@@ -103,7 +106,10 @@ class Communication:
             if x == self.vehicle_type+'_'+self.vehicle_id:
 
                 trueodom=Odometry()
-                trueodom.header.stamp = rospy.Time.now()
+                if self.img_stamp == None:
+                    trueodom.header.stamp = rospy.Time.now()
+                else:
+                    trueodom.header.stamp =self.img_stamp 
                 trueodom.header.frame_id ="world"
                 pose=msg.pose[i]
                 quat=pose.orientation
@@ -126,6 +132,9 @@ class Communication:
                 trueodom.child_frame_id="base_link"
                 self.vio_pub.publish(trueodom)
                 break
+
+    def  img_callback(self, msg):
+        self.img_stamp = msg.header.stamp
 
     def local_pose_callback(self, msg):
         self.local_pose = msg
