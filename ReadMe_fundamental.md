@@ -127,28 +127,33 @@ roslaunch mobile_cylinder multi_box.launch
 Then you can set target in rviz!
 
 ## cooperative 
-you need to install gazebo_ros_link_attacher plugin following this github instructions:
-https://github.com/pal-robotics/gazebo_ros_link_attacher
+you need to install gazebo_ros_link_attacher plugin following this:
+```
+mkdir -p gazebo_link_attacher_ws/src
+cd gazebo_link_attacher_ws/src
+catkin_init_workspace
+git clone https://github.com/SwonGao/gazebo_ros_link_attacher.git
+cd ..
+catkin_make
+```
+
+Then, you 'd better copy the following lines into the ~/.bashrc file:
+```
+source ~/gazebo_link_attacher_ws/devel/setup.bash     #This should above the line "source px4..."
+export GAZEBO_PLUGIN_PATH=${GAZEBO_PLUGIN_PATH}:~/gazebo_ros_link_attacher/devel/lib
+```
+
 ```
 cd PX4_Firmware
 source ~/catkin_ws/devel/setup.bash    # (optional)
 source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
-
 export GAZEBO_PLUGIN_PATH=${GAZEBO_PLUGIN_PATH}:~/gazebo_ros_link_attacher/devel/lib
+
 roslaunch px4 amu_cooperative_assembly.launch
 ```
-In another terminal: copy the "cooperative_attach.py" into ~/gazebo_ros_link_attacker/scripts
-source ~/gazebo_ros_link_attacher/devel/setup.bash
 
-python ~/gazebo_ros_link_attacher/src/gazebo_ros_link_attacher/scripts/cooperative_attach.py
-
-you will see:
-[INFO] : Attaching iris_0 and payload
-[INFO] : Attaching iris_1 and payload
-[INFO] : Attaching iris_2 and payload
-It indicates UAVs and payload are linked together
 
 Then:
 cd ~/XTDrone/communication
