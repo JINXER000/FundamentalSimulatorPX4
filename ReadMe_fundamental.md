@@ -30,6 +30,9 @@ make px4_sitl_default gazebo
 
 
 You can also copy the catkin_ws into your home folder. 
+
+## dummy update
+cp ~/PX4_Firmware/Tools/sitl_gazebo/models/ihumanv1/* ~/.gazebo/models/
 # Use simulator without offboard
 
 ```
