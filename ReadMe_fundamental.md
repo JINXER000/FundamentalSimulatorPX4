@@ -1,4 +1,4 @@
-# NOte
+# N0te
 - iris, iris_asus are in sitl mode. If you want to do hitl, please modify sdf.
 - after using git pull, do 'git submodule  init & git submodule update'
 # install
@@ -15,6 +15,10 @@ git submodule update --init --recursive
 One additional step: 
 ```
   cp -r Tools/sitl_gazebo/models/*  ~/.gazebo/models/
+  rm -r ~/.gazebo/models/stereo_camera/
+  cp -r catkin_ws/* ~/
+  cd ~/catkin_ws
+  catkin_make
   ```
 - add human model:
 ```
@@ -37,7 +41,6 @@ cp ~/PX4_Firmware/Tools/sitl_gazebo/models/ihumanv1/* ~/.gazebo/models/
 
 ```
 cd PX4_Firmware
-cp -r catkin_ws/* ~/
 source ~/catkin_ws/devel/setup.bash   
 source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
@@ -104,7 +107,7 @@ source ~/catkin_ws/devel/setup.bash    # (optional)
 source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
-roslaunch px4 hitl.launch 
+roslaunch px4 imav_indoor_hitl.launch 
 
 cd control_scripts
 python multirotor_communication.py iris 0
@@ -166,6 +169,22 @@ python multirotor_keyboard_control.py iris 3 vel
 
 After taking off, you need to delete the shelfs:
 rosservice call /gazebo/delete_model "model_name: 'shelfs'"
+
+## IMAV outdoor
+```
+cd PX4_Firmware
+source ~/catkin_ws/devel/setup.bash   
+source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
+roslaunch px4 imav_outdoor.launch 
+
+cd control_scripts
+python multirotor_communication_manual.py iris 0
+python multirotor_keyboard_control.py iris 1 vel
+
+```
+Then you might control the UAV manually.
 
 ## developing
 

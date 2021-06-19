@@ -11,9 +11,11 @@
     <arg name="Y" default="0"/>
     <!-- vehicle model and world -->
     <arg name="vehicle" default="iris"/>
-    <!-- <arg name="my_model" default="iris_3d_lidar"/> -->
-        <arg name="my_model" default="iris_asus_lidar"/>
-    <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/drc_wall.world"/>
+    <!-- <arg name="my_model" default="iris_2d_lidar"/> -->
+    <arg name="my_model" default="iris_stereo_lidar_down"/>
+        <!-- <arg name="my_model" default="iris_stereo_camera_and_asus"/> -->
+          <!-- <arg name="my_model" default="iris_realsense"/> -->
+    <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/imav_outdoor_simple.world"/>
     <arg name="sdf" default="$(find mavlink_sitl_gazebo)/models/$(arg my_model)/$(arg my_model).sdf"/>
     <!-- gazebo configs -->
     <arg name="gui" default="true"/>
