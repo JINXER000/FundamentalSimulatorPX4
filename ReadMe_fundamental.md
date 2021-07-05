@@ -7,7 +7,7 @@ ubuntu 18.04, gazebo 9.10+
 ## steps
 First we recommand you follow https://www.yuque.com/xtdrone/manual_cn/basic_config_1.11 strictly!
  to install dependencies. Run one demo before trying below. 
-Then you replace the official repo with this one.
+Then you can do the following routine:
 ```
 git clone  https://gitee.com/jinxer000/fundamental_sys_xtdrone.git
 git submodule update --init --recursive
@@ -16,15 +16,13 @@ One additional step:
 ```
   cp -r Tools/sitl_gazebo/models/*  ~/.gazebo/models/
   rm -r ~/.gazebo/models/stereo_camera/
-  cp -r catkin_ws/* ~/
+  cp -r catkin_ws ~/
   cd ~/catkin_ws
   catkin_make
   ```
-- add human model:
-```
-cp -r Tools/sitl_gazebo/models/ihuman/* ~/.gazebo/models/
-```
+
 Also make sure cpc_aux_mapping, cpc_motion_planning, cpc_reference_publisher,cpc_ws in imav branch.
+You may set up the environment of CPC by following the readme in cpc_ws.
 Then compile two repos respectively.
 For PX4_firmware, you can do
 ```
@@ -32,11 +30,6 @@ git tag -a v1.11.0 -m "init"
 make px4_sitl_default gazebo
 ```
 
-
-You can also copy the catkin_ws into your home folder. 
-
-## dummy update
-cp ~/PX4_Firmware/Tools/sitl_gazebo/models/ihumanv1/* ~/.gazebo/models/
 # Use simulator without offboard
 
 ```
@@ -65,7 +58,7 @@ roslaunch px4 imav_indoor_rich.launch
 
 cd control_scripts
 python multirotor_communication.py iris 0
-rosservice call /iris_0/engage
+
 
 cd cpc_ws
 roslaunch cpc_aux_mapping hitl_sim.launch
@@ -179,19 +172,31 @@ export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
 export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
 roslaunch px4 imav_outdoor.launch 
 
-cd control_scripts
-python multirotor_communication_manual.py iris 0
-python multirotor_keyboard_control.py iris 1 vel
+cd apf_ws
+roslaunch px4_controller px4_control.launch
 
+cd cpc_ws
+roslaunch cpc_aux_mapping hitl_sim.launch 
+roslaunch cpc_motion_planning motion_nf1_sitl.launch
+
+rosservice call /iris_0/engage
 ```
-Then you might control the UAV manually.
+Then click on RVIZ to set targets.
+
+If u want to try task:
+```
+cd zbar_ws
+roslaunch roslaunch zbar_ros example.launch
+cd ltl_ros_ws/
+source devel/setup.bash
+python src/P_MAS_TG/guo_thesis_algorithm/imav_outdoor_px4.py
+```
 
 ## developing
 
 roslaunch cpc_aux_mapping laser3d_sim.launch
 roslaunch cpc_aux_mapping sim_uav.launch
 
-launch-prefix="xterm -e cuda-gdb --args"
 
 ## about texture (For Zhaiyu)
 Scripts can be found in:
