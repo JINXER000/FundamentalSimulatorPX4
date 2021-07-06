@@ -1,15 +1,118 @@
-# N0te
+# Note
 - iris, iris_asus are in sitl mode. If you want to do hitl, please modify sdf.
-- after using git pull, do 'git submodule  init & git submodule update'
+
 # install
 ## basic requirements: 
 ubuntu 18.04, gazebo 9.10+
 ## steps
 First we recommand you follow https://www.yuque.com/xtdrone/manual_cn/basic_config_1.11 strictly!
  to install dependencies. Run one demo before trying below. 
-Then you can do the following routine:
+
+Then you can download our repo:
 ```
 git clone  https://gitee.com/jinxer000/fundamental_sys_xtdrone.git
+```
+If you are in mainland China, we recommend you to update the submodules to point to gitee:
+
+ revise .gitmodules
+```
+[submodule "mavlink/include/mavlink/v2.0"]
+	path = mavlink/include/mavlink/v2.0
+	url = https://gitee.com/robin_shaun/c_library_v2.git
+	branch = master
+[submodule "src/drivers/uavcan/libuavcan"]
+	path = src/drivers/uavcan/libuavcan
+	url = https://gitee.com/robin_shaun/uavcan.git
+	branch = px4
+[submodule "Tools/jMAVSim"]
+	path = Tools/jMAVSim
+	url = https://gitee.com/robin_shaun/jMAVSim.git
+	branch = master
+[submodule "Tools/sitl_gazebo"]
+	path = Tools/sitl_gazebo
+	url = https://gitee.com/jinxer000/sitl_gazebo_hitl.git
+	branch = hitl_dev
+[submodule "src/lib/matrix"]
+	path = src/lib/matrix
+	url = https://gitee.com/robin_shaun/Matrix.git
+	branch = master
+[submodule "src/lib/ecl"]
+	path = src/lib/ecl
+	url = https://gitee.com/robin_shaun/ecl.git
+	branch = master
+[submodule "boards/atlflight/cmake_hexagon"]
+	path = boards/atlflight/cmake_hexagon
+	url = https://gitee.com/robin_shaun/cmake_hexagon.git
+	branch = px4
+[submodule "src/drivers/gps/devices"]
+	path = src/drivers/gps/devices
+	url = https://gitee.com/robin_shaun/GpsDrivers.git
+	branch = master
+[submodule "src/modules/micrortps_bridge/micro-CDR"]
+	path = src/modules/micrortps_bridge/micro-CDR
+	url = https://gitee.com/robin_shaun/micro-CDR.git
+	branch = px4
+[submodule "platforms/nuttx/NuttX/nuttx"]
+	path = platforms/nuttx/NuttX/nuttx
+	url = https://gitee.com/robin_shaun/NuttX.git
+	branch = px4_firmware_nuttx-9.1.0+
+[submodule "platforms/nuttx/NuttX/apps"]
+	path = platforms/nuttx/NuttX/apps
+	url = https://gitee.com/robin_shaun/NuttX-apps.git
+	branch = px4_firmware_nuttx-9.1.0+
+[submodule "platforms/qurt/dspal"]
+	path = platforms/qurt/dspal
+	url = https://gitee.com/robin_shaun/dspal.git
+[submodule "Tools/flightgear_bridge"]
+	path = Tools/flightgear_bridge
+	url = https://gitee.com/robin_shaun/PX4-FlightGear-Bridge.git
+	branch = master 
+[submodule "Tools/jsbsim_bridge"]
+	path = Tools/jsbsim_bridge
+	url = https://gitee.com/robin_shaun/px4-jsbsim-bridge.git
+[submodule "src/examples/gyro_fft/CMSIS_5"]
+	path = src/examples/gyro_fft/CMSIS_5
+	url = https://gitee.com/mirrors/CMSIS_5
+```
+run 
+```
+git submodule update --init
+cd ~/PX4_Firmware/src/drivers/uavcan/libuavcan
+```
+revise .gitmodules
+```
+[submodule "dsdl"]
+	path = dsdl
+	url = https://gitee.com/robin_shaun/dsdl
+	branch = legacy-v0
+[submodule "libuavcan/dsdl_compiler/pyuavcan"]
+	path = libuavcan/dsdl_compiler/pyuavcan
+	url = https://gitee.com/robin_shaun/pyuavcan
+[submodule "libuavcan_drivers/kinetis"]
+	path = libuavcan_drivers/kinetis
+	url = https://gitee.com/robin_shaun/libuavcan_kinetis.git
+```
+```
+git submodule update --init
+cd ~/PX4_Firmware/Tools/jMAVSim
+```
+revise .gitmodules
+```
+[submodule "jMAVlib"]
+	path = jMAVlib
+	url = https://gitee.com/robin_shaun/jMAVlib
+	branch = master
+```
+```
+git submodule update --init
+cd ~/PX4_Firmware/Tools/sitl_gazebo
+```
+```
+git submodule update --init
+cd ~/PX4_Firmware/Tools/sitl_gazebo
+```
+
+```
 git submodule update --init --recursive
 ```
 One additional step: 
@@ -29,8 +132,9 @@ For PX4_firmware, you can do
 git tag -a v1.11.0 -m "init"
 make px4_sitl_default gazebo
 ```
-
-# Use simulator without offboard
+Finnaly, rename the root folder as 'PX4_firmware'.
+# quick guide to launch
+## Use simulator without offboard
 
 ```
 cd PX4_Firmware
@@ -47,7 +151,7 @@ python multirotor_keyboard_control.py iris 1 vel
 ```
 Then you might control the UAV manually.
 If you want to use 3d lidar, please replace line 15 with line 14 in launch file
-# indoor demo with offboard
+## indoor demo with offboard
 ```
 cd PX4_Firmware
 source ~/catkin_ws/devel/setup.bash    # (optional)
@@ -67,7 +171,58 @@ roslaunch cpc_motion_planning motion_nf1_sitl.launch
 roslaunch mobile_cylinder multi_box.launch
 ```
 Then use 2d navigation goal to set target
-# multi-agent demo with offboard
+
+## task-motion with BT
+```
+cd core_module/cpc_motion_planing
+git checkout "emergency"
+
+
+cd PX4_Firmware
+source ~/catkin_ws/devel/setup.bash    # (optional)
+source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
+roslaunch px4 imav_indoor_rich.launch 
+
+cd control_scripts
+python multirotor_communication.py iris 0
+
+
+cd cpc_ws
+roslaunch cpc_aux_mapping hitl_sim.launch
+roslaunch cpc_motion_planning motion_nf1_sitl.launch
+
+cd Behavior_tree_ws
+roslaunch behavior_tree_leaves guard_robot_behavior_tree.launch
+```
+The task is go to (2,10,2).
+Note the target cannot be set in RVIZ  for now.
+
+## Dummy detection with YOLO
+```
+cd PX4_Firmware
+source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
+roslaunch px4 imav_indoor_yolo.launch
+
+cd control_scripts
+python multirotor_communication_manual.py typhoon_h480 0
+python gimbal_control.py typhoon_h480 0
+python multirotor_keyboard_control.py typhoon_h480 1 vel
+
+cd darknet_ros_ws
+roslaunch darknet_ros task1.launch
+
+```
+or
+```
+python multirotor_communicationl.py typhoon_h480 0
+roslaunch cpc_aux_mapping hitl_sim.launch  vehicle:=typhoon_h480_0
+roslaunch cpc_motion_planning motion_nf1_sitl.launch vehicle:=typhoon_h480_0
+```
+## multi-agent demo with offboard
 Since the target is same, agents will crash with each other.
 ```
 cd PX4_Firmware
@@ -197,6 +352,8 @@ python src/P_MAS_TG/guo_thesis_algorithm/imav_outdoor_px4.py
 roslaunch cpc_aux_mapping laser3d_sim.launch
 roslaunch cpc_aux_mapping sim_uav.launch
 
+## todo
+pass arg of vehicle into cpc.
 
 ## about texture (For Zhaiyu)
 Scripts can be found in:
