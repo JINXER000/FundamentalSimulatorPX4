@@ -4,7 +4,7 @@
     <!-- launches Gazebo environment and 2x: MAVROS, PX4 SITL, and spawns vehicle -->
     <!-- vehicle model and world -->
     <arg name="est" default="ekf2"/>
-    <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/outdoor2.world"/>
+    <arg name="world" default="$(find mavlink_sitl_gazebo)/worlds/imav_outdoor_simple.world"/>
     <!-- gazebo configs -->
     <arg name="gui" default="true"/>
     <arg name="debug" default="false"/>
@@ -26,14 +26,14 @@
             <arg name="fcu_url" default="udp://:24540@localhost:34580"/>
         <!-- PX4 SITL and vehicle spawn -->
         <include file="$(find px4)/launch/single_vehicle_spawn_xtd.launch">
-            <arg name="x" value="0"/>
-            <arg name="y" value="3"/>
+            <arg name="x" value="-0.5"/>
+            <arg name="y" value="-0.5"/>
             <arg name="z" value="0"/>
             <arg name="R" value="0"/>
             <arg name="P" value="0"/>
             <arg name="Y" value="0"/>
             <arg name="vehicle" value="iris"/>
-            <arg name="sdf" value="iris_2d_lidar"/>
+            <arg name="sdf" value="iris_stereo_lidar_down"/>
             <arg name="mavlink_udp_port" value="18570"/>
             <arg name="mavlink_tcp_port" value="4560"/>
             <arg name="ID" value="$(arg ID)"/>
@@ -56,14 +56,14 @@
             <arg name="fcu_url" default="udp://:24541@localhost:34581"/>
         <!-- PX4 SITL and vehicle spawn -->
         <include file="$(find px4)/launch/single_vehicle_spawn_xtd.launch">
-            <arg name="x" value="3"/>
-            <arg name="y" value="3"/>
+            <arg name="x" value="-20.5"/>
+            <arg name="y" value="25.5"/>
             <arg name="z" value="0"/>
             <arg name="R" value="0"/>
             <arg name="P" value="0"/>
             <arg name="Y" value="0"/>
             <arg name="vehicle" value="iris"/>
-            <arg name="sdf" value="iris_2d_lidar"/>
+            <arg name="sdf" value="iris_stereo_lidar_down"/>
             <arg name="mavlink_udp_port" value="18571"/>
             <arg name="mavlink_tcp_port" value="4561"/>
             <arg name="ID" value="$(arg ID)"/>

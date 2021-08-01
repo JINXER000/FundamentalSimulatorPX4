@@ -242,6 +242,8 @@ class Communication:
                             msg.pose.position.z-self.initial_pose.z) 
         # self.target_motion = self.construct_target(x=msg.pose.position.x,y=msg.pose.position.y,z=msg.pose.position.z)
         self.target_motion = self.construct_target(x=cmd_local.x,y=cmd_local.y,z=cmd_local.z, yaw=yaw_tgt)
+        print('target pose is {x}  {y}  {z}'.format(x=cmd_local.x,y=cmd_local.y,z=cmd_local.z))
+
 
  
     def cmd_pose_enu_callback(self, msg):

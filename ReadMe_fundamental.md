@@ -224,6 +224,7 @@ roslaunch cpc_motion_planning motion_nf1_sitl.launch vehicle:=typhoon_h480_0
 ```
 ## multi-agent demo with offboard
 Since the target is same, agents will crash with each other.
+A remedy is setting offsets in targets.
 ```
 cd PX4_Firmware
 source ~/catkin_ws/devel/setup.bash    # (optional)
@@ -340,8 +341,38 @@ Then click on RVIZ to set targets.
 
 If u want to try task:
 ```
-cd zbar_ws
-roslaunch roslaunch zbar_ros example.launch
+cd NUC-CODE
+roslaunch zbar_ros example.launch
+cd ltl_ros_ws/
+source devel/setup.bash
+python src/P_MAS_TG/guo_thesis_algorithm/imav_outdoor_px4.py
+```
+## IMAV outdoor-2drone
+```
+cd PX4_Firmware
+source ~/catkin_ws/devel/setup.bash   
+source Tools/setup_gazebo.bash $(pwd) $(pwd)/build/px4_sitl_default
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)
+export ROS_PACKAGE_PATH=$ROS_PACKAGE_PATH:$(pwd)/Tools/sitl_gazebo
+roslaunch px4 imav_outdoor_2drone.launch 
+
+cd apf_ws
+roslaunch px4_controller px4_control_2drone.launch
+
+cd cpc_ws
+roslaunch cpc_aux_mapping hitl_sim.launch 
+roslaunch cpc_motion_planning motion_nf1_sitl.launch
+
+rosservice call /iris_0/engage
+rosservice call /iris_1/engage
+```
+Then click on RVIZ to set targets.
+
+NOTE: the output pose is $(vehicle_name)/ground_truth/state
+If u want to try task:
+```
+cd NUC-CODE
+roslaunch zbar_ros zbar_2drone.launch
 cd ltl_ros_ws/
 source devel/setup.bash
 python src/P_MAS_TG/guo_thesis_algorithm/imav_outdoor_px4.py
@@ -349,12 +380,32 @@ python src/P_MAS_TG/guo_thesis_algorithm/imav_outdoor_px4.py
 
 ## developing
 
+
 roslaunch cpc_aux_mapping laser3d_sim.launch
 roslaunch cpc_aux_mapping sim_uav.launch
 
 ## todo
-pass arg of vehicle into cpc.
+the problem of outdoor 2 drone: the vision_pose cannot change local_pose. blocked px4_controller for now... use ref instead.  
+we must past global position into px4, so that it can know the real target. if it always think that the initial pose is 0,0, then the tgt is wrong. 
+1. odometry_out will cause tf issue:
+2. /iris_0/mavros/vision_pose/pose cannot fuse with mavros/local_position/pose.
 
+Since the mavros origin is always (0,0,0),
+in multi demo, i set init_pose...
+```
+            self.initial_pose=Vector3(self.model_pose.x-self.local_pose.pose.position.x,
+                                        self.model_pose.y-self.local_pose.pose.position.y,
+                                        self.model_pose.z-self.local_pose.pose.position.z)
+```
+then in command_pose:
+```
+      cmd_local =Vector3(msg.pose.position.x-self.initial_pose.x,
+                            msg.pose.position.y-self.initial_pose.y,
+                            msg.pose.position.z-self.initial_pose.z) 
+```
+
+3. does vrpn node pub tf??
+iris_1 ref_traj always 0???
 ## about texture (For Zhaiyu)
 Scripts can be found in:
 /usr/share/gazebo-9/media/materials/scripts$
