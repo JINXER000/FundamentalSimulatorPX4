@@ -1,6 +1,7 @@
 # Note
 - iris, iris_asus are in sitl mode. If you want to do hitl, please modify sdf.
-
+- revise asus: <pointCloudCutoffMax>=10.0
+- revise 3d_lidar: <vertical><samples>=16
 # install
 ## basic requirements: 
 ubuntu 18.04, gazebo 9.10+
