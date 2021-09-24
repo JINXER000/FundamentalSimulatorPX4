@@ -124,16 +124,22 @@ One additional step:
   cd ~/catkin_ws
   catkin_make
   ```
+## Companion PC (PC)  configuration
+- how to get code?
+1. ask Shupeng for permission to bitbucket
+2. Download from google drivers
 
-Also make sure cpc_aux_mapping, cpc_motion_planning, cpc_reference_publisher,cpc_ws in imav branch.
+Make sure cpc_aux_mapping, cpc_motion_planning, cpc_reference_publisher,cpc_ws in imav branch.
 You may set up the environment of CPC by following the readme in cpc_ws.
+
+## compilation     
 Then compile two repos respectively.
 For PX4_firmware, you can do
 ```
 git tag -a v1.11.0 -m "init"
 make px4_sitl_default gazebo
 ```
-Finnaly, rename the root folder as 'PX4_firmware'.
+
 # quick guide to launch
 ## Use simulator without offboard
 
